@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: bisque;
+}
+
+h1 {
+    text-align: center;
+    color: darkolivegreen;
+    padding-top: 20px;
+}
+
+.start {
+    color: bisque;
+    background-color: darkolivegreen;
+    text-align: center;
+    padding: 10px;
+}
+
+.mainbox {}
+
+.startlet {}
+
+.scorebox {}
+
+.infobox {}
+
+.wins h2 {
+    color: darkolivegreen;
+}
+
+.losses {
+    color: darkolivegreen;
+}
