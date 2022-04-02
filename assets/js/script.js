@@ -7,20 +7,34 @@ var lossesEle = document.querySelector("#losses-score");
 var startButton = document.querySelector("#start-button");
 var timerEle = document.querySelector("#timer-text");
 var wordFieldEle = document.querySelector(".startlet");
+var resetButtonEle = document.querySelector(".reset");
 
 /*******************************************************************************
  * Event listeners that we need
  ******************************************************************************/
 
+// the start button starts the game
 startButton.addEventListener("click", start);
+
+// the reset score button resets local storage
+resetButtonEle.addEventListener("click", ()=>{
+  wins = 0;
+  losses = 0;
+  updateStorage();
+  updateScore();
+});
+
 // key down logic
 document.addEventListener("keydown", (event)=>{
   // if we aren't playin right now, get me out of here!
   if(!inGame) return;
+  // make it so we aren't worrying about case sensitivity
+  var input = event.key.toLowerCase();
+  
   // check to see if the key we got is in the guess
-  if(checkLetter(event.key)){
+  if(checkLetter(input)){
     // replace the letter in the player's guess
-    replaceLetter(event.key);
+    replaceLetter(input);
   }
   
 });
@@ -33,9 +47,9 @@ document.addEventListener("keydown", (event)=>{
 var statsKey = "stats";
 var timerStart = 10;
 
-// 
 /**
- * All possible words that can be solutions. Should be all lower case
+ * All possible words that can be solutions. Should be lower case and no 
+ * whitespace or special characters.
  */
 var wordBank = [
   "variable",
@@ -43,7 +57,11 @@ var wordBank = [
   "turing",
   "switch",
   "loop",
-  "asimov"
+  "asimov",
+  "javascript",
+  "function",
+  "method",
+  "declaration"
 ];
 
 /*******************************************************************************
