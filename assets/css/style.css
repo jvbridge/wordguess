@@ -1,34 +1,96 @@
 * {
     margin: 0;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    background-color: bisque;
+    background-color: rgb(148, 160, 116);
 }
 
 h1 {
     text-align: center;
     color: darkolivegreen;
     padding-top: 20px;
+    font-size: 75px;
+    text-decoration: underline rgb(38, 136, 68);
 }
 
 .start {
-    color: bisque;
+    color: white;
     background-color: darkolivegreen;
     text-align: center;
     padding: 10px;
+    cursor: pointer;
+    float: right;
 }
 
-.mainbox {}
+.reset {
+    color: white;
+    background-color: darkolivegreen;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+}
 
-.startlet {}
+.mainbox {
+    padding: 10%;
+    text-align: center;
+}
 
-.scorebox {}
+.startlet {
+    color: white;
+    font-size: xx-large;
+}
+
+.mainbox .startlet {
+    background-color: darkolivegreen;
+    padding: 100px;
+    border-radius: 10px;
+    width: 40%;
+}
+
+.scorebox {
+    /* background-color: darkolivegreen; */
+    text-align: center;
+    color: white;
+    padding: 50px;
+    border-radius: 10px;
+    float: right;
+}
 
 .infobox {}
 
+.scorebox .infobox {
+    background-color: darkolivegreen;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+span {
+    background-color: darkolivegreen;
+}
+
 .wins h2 {
-    color: darkolivegreen;
+    color: white;
+    background-color: darkolivegreen;
 }
 
 .losses {
-    color: darkolivegreen;
+    color: white;
+}
+
+.timer .timertext {
+    background-color: darkolivegreen;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.timertext {
+    color: white;
+    text-align: center;
+    font-size: x-large;
+    float: right;
+}
+
+h3 {
+    color: white;
+    background-color: darkolivegreen;
+    padding: 20px;
 }
