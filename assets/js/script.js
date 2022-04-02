@@ -14,12 +14,15 @@ var wordFieldEle = document.querySelector(".startlet");
 
 startButton.addEventListener("click", start);
 // key down logic
-Document.addEventListener("keydown", (event)=>{
+document.addEventListener("keydown", (event)=>{
   // if we aren't playin right now, get me out of here!
   if(!inGame) return;
-
-  // TODO
-  // key down logic
+  // check to see if the key we got is in the guess
+  if(checkLetter(event.key)){
+    // replace the letter in the player's guess
+    replaceLetter(event.key);
+  }
+  
 });
 
 /*******************************************************************************
@@ -30,14 +33,17 @@ Document.addEventListener("keydown", (event)=>{
 var statsKey = "stats";
 var timerStart = 10;
 
-// all possible words that can be solutions
+// 
+/**
+ * All possible words that can be solutions. Should be all lower case
+ */
 var wordBank = [
   "variable",
   "logic",
-  "Turing",
+  "turing",
   "switch",
   "loop",
-  "Asimov"
+  "asimov"
 ];
 
 /*******************************************************************************
@@ -79,6 +85,22 @@ function init(){
 }
 
 /**
+ *  Cleans up variables and resets them after a game is over 
+ */
+function cleanUp(){
+  // stops the timer and sets it to 10 seconds
+  resetTimer();
+  // if we lost show them the answer
+  playerGuess = currentWord;
+  updateWordField();
+  inGame = false;
+  updateStorage();
+  startButton.style.display = ""; // make the start button visible again
+
+}
+
+
+/**
  * Looks updates the score with the appropriate values
  */
 function updateScore(){
@@ -109,16 +131,27 @@ function start(){
 
   // choose a random word to be the correct one
   currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+  console.log("The answer is: " + currentWord);
+  
   // make the player's guess a bunch of spaces
   playerGuess = playerGuess = ' '.repeat(currentWord.length);
+
+  // propogate the lack of guessing to the DOM
+  updateWordField();
+
+  // we are now in game
+  inGame = true;
+  
 
   // starts the countdown, triggers every second, checks for wins or losses
   timerIntervalID = setInterval(()=>{
     timeRemaining--;
+    // update DOM
     updateTimer();
     if (checkWin()){win();} // if we are in a winning state we win!
     if (timeRemaining < 0){lose();} // if we are out of time we lose!
   },1000);
+
   // makes the start button invisible
   startButton.style.display = "none";
 }
@@ -131,14 +164,7 @@ function start(){
 function lose(){
   losses++; 
   updateScore(); 
-  updateStorage(); 
-  resetTimer();
-   // show them what the solution was
-  playerGuess = currentWord;
-  updateWordField();
-
-  // start button reappears
-  startButton.style.display = "";
+  cleanUp();
 }
 
 /**
@@ -148,18 +174,17 @@ function lose(){
 function win(){
   wins++;
   updateScore();
-  updateStorage();
-  resetTimer();
+  cleanUp();
 }
 
 /**
- * Stops the timer and resets it to the beginning
+ * Stops the timer and resets it to the beginning.
  */
 function resetTimer(){
   clearInterval(timerIntervalID); // stops the countdown
   timeRemaining = timerStart; // reset the countdown
   updateTimer(); // propogate value to DOM
-  startButton.style.display = ""; // make the start button visible again
+  
 }
 
 /**
@@ -223,12 +248,33 @@ function updateWordField(){
 }
 
 /**
- * Returns true if the letter is in the word false if not
+ * Returns true if the letter is in the current word we are testing, false if 
+ * not
  * @param {string} letter a single character of a string
  * @returns {boolean} 
  */
 function checkLetter(letter){
+  for (var i = 0; i < currentWord.length; i++){
+    if (letter == currentWord.charAt(i)) return true;
+  }
   return false;
+}
+
+/**
+ * Takes a single character and replaces the appropriate characters in 
+ * player guess from being spaces to that character, then updates the UI
+ * @param {string} char 
+ */
+function replaceLetter(char){
+  for(var i =0; i < currentWord.length; i++){
+    // if the letter we got as an argument is equal to the current letter 
+    if (currentWord.charAt(i) == char){
+      // replace the character in the same spot with it
+      playerGuess = playerGuess.substring(0, i ) + char + playerGuess.substring(i+1);
+    }
+    // update the DOM
+    updateWordField();
+  }
 }
 
 init();
