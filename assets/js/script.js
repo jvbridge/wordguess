@@ -13,6 +13,14 @@ var wordFieldEle = document.querySelector(".startlet");
  ******************************************************************************/
 
 startButton.addEventListener("click", start);
+// key down logic
+Document.addEventListener("keydown", (event)=>{
+  // if we aren't playin right now, get me out of here!
+  if(!inGame) return;
+
+  // TODO
+  // key down logic
+});
 
 /*******************************************************************************
  * Varibales we don't expect to change (we haven't coverd const yet)
@@ -32,7 +40,6 @@ var wordBank = [
   "Asimov"
 ];
 
-
 /*******************************************************************************
  * Varables to be modified during the game
  ******************************************************************************/
@@ -45,6 +52,11 @@ var displayValue = "HE _ _ O"; // what is displayed on the word guess
 var timerIntervalID; // used to hold the timer's setInterval() ID;
 var currentWord; // the current solution to the wordguess
 var playerGuess; // what the player has guessed so far including blanks
+var inGame = false; // if we are in a game currently
+
+/*******************************************************************************
+ * FUNCTIONS!
+ ******************************************************************************/
 
 /**
  * This function is called at load time for the page. Checks local storage for
@@ -97,7 +109,8 @@ function start(){
 
   // choose a random word to be the correct one
   currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-  playerGuess = 
+  // make the player's guess a bunch of spaces
+  playerGuess = playerGuess = ' '.repeat(currentWord.length);
 
   // starts the countdown, triggers every second, checks for wins or losses
   timerIntervalID = setInterval(()=>{
@@ -123,6 +136,9 @@ function lose(){
    // show them what the solution was
   playerGuess = currentWord;
   updateWordField();
+
+  // start button reappears
+  startButton.style.display = "";
 }
 
 /**
@@ -205,4 +221,14 @@ function updateWordField(){
   displayValue = convertWordDOM(playerGuess);
   wordFieldEle.textContent = displayValue;
 }
+
+/**
+ * Returns true if the letter is in the word false if not
+ * @param {string} letter a single character of a string
+ * @returns {boolean} 
+ */
+function checkLetter(letter){
+  return false;
+}
+
 init();
