@@ -40,10 +40,11 @@ var wordBank = [
 var wins = 0; // how many times we have won
 var losses = 0; // how many times we have lost
 var timeRemaining = timerStart; // time left on the timer
-var currentSolution = []; // what letters the player currently has
 var displayValue = "HE _ _ O"; // what is displayed on the word guess
 
 var timerIntervalID; // used to hold the timer's setInterval() ID;
+var currentWord; // the current solution to the wordguess
+var playerGuess; // what the player has guessed so far including blanks
 
 /**
  * This function is called at load time for the page. Checks local storage for
@@ -71,7 +72,6 @@ function init(){
 function updateScore(){
   winsEle.textContent = wins;
   lossesEle.textContent = losses;
-  
 }
 
 /**
@@ -90,14 +90,20 @@ function updateWordField(){
 
 /**
  * This is called when the start button is clicked. Starts the timer and sets up
- * the word
+ * the word.
  */
 function start(){
   console.log("starting the game!");
-  // starts the countdown, triggers every second
+
+  // choose a random word to be the correct one
+  currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
+  playerGuess = 
+
+  // starts the countdown, triggers every second, checks for wins or losses
   timerIntervalID = setInterval(()=>{
     timeRemaining--;
     updateTimer();
+    if (checkWin()){win();} // if we are in a winning state we win!
     if (timeRemaining < 0){lose();} // if we are out of time we lose!
   },1000);
   // makes the start button invisible
@@ -107,16 +113,16 @@ function start(){
 
 /**
  * Called when the player loses the game. Increments the losses by one and 
- * writes to local storage
+ * writes to local storage, then resets the game to starting state.
  */
 function lose(){
-  losses++; // make our losses one more
-  updateScore(); // update the score
-  updateStorage(); // update the storage
-  clearInterval(timerIntervalID); // stops the countdown
-  timeRemaining = timerStart; // reset the countdown
-  updateTimer();
-  startButton.style.display = ""; // make the start button visible again
+  losses++; 
+  updateScore(); 
+  updateStorage(); 
+  resetTimer();
+   // show them what the solution was
+  playerGuess = currentWord;
+  updateWordField();
 }
 
 /**
@@ -127,11 +133,22 @@ function win(){
   wins++;
   updateScore();
   updateStorage();
+  resetTimer();
+}
+
+/**
+ * Stops the timer and resets it to the beginning
+ */
+function resetTimer(){
+  clearInterval(timerIntervalID); // stops the countdown
+  timeRemaining = timerStart; // reset the countdown
+  updateTimer(); // propogate value to DOM
+  startButton.style.display = ""; // make the start button visible again
 }
 
 /**
  * Goes into the storage and gets an object with the statistics
- * @returns {object} the stats object 
+ * @returns {object} the stats object. 
  */
 function getStorage(){
   return JSON.parse(localStorage.getItem(statsKey));
@@ -148,4 +165,44 @@ function updateStorage (){
   localStorage.setItem(statsKey, JSON.stringify(stats));
 }
 
+/**
+ * Checks to see if the player has won. 
+ * @returns {boolean} True if player has won false if not. Does not indicate 
+ * loss state.
+ */
+function checkWin(){
+  if (currentWord == playerGuess){
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Converts a single word into how it should be displayed to the player on the
+ * DOM. Substitutes spaces for blank spots.
+ * @param {string} word the word to convert
+ * @returns {string} a string that can be written directly to the DOM
+ */
+function convertWordDOM(word){
+  displayValue = "";
+  for(var i = 0; i < word.length; i++){
+    var char  = word.charAt(i);
+    if (char == " "){
+      displayValue = displayValue + "_ ";
+    } else {
+      displayValue = displayValue + char.toUpperCase() + " ";
+    }
+  }
+  
+  return displayValue;
+}
+
+/**
+ * Updates the word field to be appropriate based on the current state of 
+ * variables
+ */
+function updateWordField(){
+  displayValue = convertWordDOM(playerGuess);
+  wordFieldEle.textContent = displayValue;
+}
 init();
