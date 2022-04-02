@@ -14,7 +14,7 @@
         <h1>Welcome to WordGuess!</h1>
     </header>
     <div>
-        <button class="start"> Click to Start!</button>
+        <button id="start-button" class="start"> Click to Start!</button>
         <button class="reset"> Try Again!</button>
     </div>
     <div>
@@ -29,15 +29,15 @@
         <div class="scorebox">
             <div class="infobox">
                 <main class="wins losses">
-                    <h2>Wins: <span class="wins">0</span></h2>
-                    <h2>Losses: <span class="losses">0</span></h2>
+                    <h2>Wins: <span id="wins-score"class="wins">0</span></h2>
+                    <h2>Losses: <span id="losses-score" class="losses">0</span></h2>
                 </main>
             </div>
     </section>
 
     <section>
         <div class="timer">
-            <div class="timertext">10
+            <div class="timertext" id="timer-text">10
                 <h3>seconds remaining!</h3>
             </div>
     </section>
