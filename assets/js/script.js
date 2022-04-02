@@ -20,6 +20,7 @@ startButton.addEventListener("click", start);
 
 // the key for getting the stats from local storage
 var statsKey = "stats";
+var timerStart = 10;
 
 // all possible words that can be solutions
 var wordBank = [
@@ -38,9 +39,11 @@ var wordBank = [
 
 var wins = 0; // how many times we have won
 var losses = 0; // how many times we have lost
-var timeRemaining = 10; // time left on the timer
+var timeRemaining = timerStart; // time left on the timer
 var currentSolution = []; // what letters the player currently has
 var displayValue = "HE _ _ O"; // what is displayed on the word guess
+
+var timerIntervalID; // used to hold the timer's setInterval() ID;
 
 /**
  * This function is called at load time for the page. Checks local storage for
@@ -91,6 +94,14 @@ function updateWordField(){
  */
 function start(){
   console.log("starting the game!");
+  // starts the countdown, triggers every second
+  timerIntervalID = setInterval(()=>{
+    timeRemaining--;
+    updateTimer();
+    if (timeRemaining < 0){lose();} // if we are out of time we lose!
+  },1000);
+  // makes the start button invisible
+  startButton.style.display = "none";
 }
 
 
@@ -99,9 +110,13 @@ function start(){
  * writes to local storage
  */
 function lose(){
-  losses++;
-  updateScore();
-  updateStorage();
+  losses++; // make our losses one more
+  updateScore(); // update the score
+  updateStorage(); // update the storage
+  clearInterval(timerIntervalID); // stops the countdown
+  timeRemaining = timerStart; // reset the countdown
+  updateTimer();
+  startButton.style.display = ""; // make the start button visible again
 }
 
 /**
