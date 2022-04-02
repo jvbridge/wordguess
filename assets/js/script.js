@@ -39,6 +39,7 @@ var wordBank = [
 var wins = 0; // how many times we have won
 var losses = 0; // how many times we have lost
 var timeRemaining = 10; // time left on the timer
+var currentSolution = []; // what letters the player currently has
 var displayValue = "HE _ _ O"; // what is displayed on the word guess
 
 /**
@@ -50,10 +51,10 @@ function init(){
   console.log(stats);
   // if we get something that's not null set up everything
   if (stats){
-    JSON.parse(stats);
+    stats = JSON.parse(stats);
     wins = stats.wins;
     losses = stats.losses;
-    updateValues();
+    updateScore();
     return;
   }
 
@@ -62,12 +63,25 @@ function init(){
 }
 
 /**
- * Looks at our varables we have and updates the DOM with the approprate values
+ * Looks updates the score with the appropriate values
  */
-function updateValues(){
+function updateScore(){
   winsEle.textContent = wins;
   lossesEle.textContent = losses;
+  
+}
+
+/**
+ * Updates the timer with the right time
+ */
+function updateTimer(){
   timerEle.textContent = timeRemaining + " seconds remaining!";
+}
+
+/**
+ * Updates the word field with the correct value given
+ */
+function updateWordField(){
   wordFieldEle.textContent = displayValue;
 }
 
@@ -86,15 +100,18 @@ function start(){
  */
 function lose(){
   losses++;
-  updateValues();
+  updateScore();
+  updateStorage();
 }
 
 /**
- * 
+ * Called when the player wins the game increments the wins by one and writes
+ * to local storage
  */
 function win(){
   wins++;
-  updateValues();
+  updateScore();
+  updateStorage();
 }
 
 /**
@@ -102,7 +119,7 @@ function win(){
  * @returns {object} the stats object 
  */
 function getStorage(){
-  return JSON.stringify(localStorage.getItem(statsKey));
+  return JSON.parse(localStorage.getItem(statsKey));
 }
 
 /**
@@ -110,8 +127,8 @@ function getStorage(){
  */
 function updateStorage (){
   stats = {
-    wins: wins,
-    losses: losses
+    "wins": wins,
+    "losses": losses
   };
   localStorage.setItem(statsKey, JSON.stringify(stats));
 }
